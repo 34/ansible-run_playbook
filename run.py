@@ -8,8 +8,13 @@ import sys
 from ansible.executor import playbook_executor
 from ansible.inventory import Inventory
 from ansible.parsing.dataloader import DataLoader
-from ansible.utils.display import Display
 from ansible.vars import VariableManager
+
+try:
+    from __main__ import display
+except ImportError:
+    from ansible.utils.display import Display
+    display = Display()
 
 
 class Options(object):
@@ -39,7 +44,7 @@ class Options(object):
 
 class Runner(object):
     def __init__(
-            self, playbook, hosts='hosts', options={}, passwords={},
+            self, playbook, display, hosts='hosts', options={}, passwords={},
             vault_pass=None):
 
         # Set options
@@ -48,7 +53,7 @@ class Runner(object):
             setattr(self.options, k, v)
 
         # Set global verbosity
-        self.display = Display()
+        self.display = display
         self.display.verbosity = self.options.verbosity
         # Executor has its own verbosity setting
         playbook_executor.verbosity = self.options.verbosity
@@ -108,6 +113,7 @@ def main():
     runner = Runner(
         playbook='site.yaml',
         hosts='hosts',
+        display=display,
         options={
             'subset': '~^localhost',
             # 'become': True,
