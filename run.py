@@ -120,8 +120,8 @@ def main():
             # 'become_method': 'sudo',
             # 'become_user': 'root',
             # 'private_key_file': '/path/to/the/id_rsa',
-            # 'tags': 'debug',
-            # 'skip_tags': 'debug',
+            'tags': '',
+            'skip_tags': '',
             # 'verbosity': 0,
         },
         # passwords={
